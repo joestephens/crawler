@@ -1,7 +1,7 @@
 # crawler
 class structure for crawler with RethinkDB and Remodel ORM.
 
-### Installation Instructions:
+## Installation Instructions:
 * Download RethinkDB server from Rethink website
 * Start server:
 ```
