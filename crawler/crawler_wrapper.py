@@ -6,15 +6,15 @@ class CrawlerWrapper(object):
     def start(self):
         first_link = self.links[0]
 
-        if not __already_crawled(first_link):
+        if not _already_crawled(first_link):
             crawler = Crawler(first_link)
             self.links.append(crawler.get_links())
-            __start_threading()
+            _start_threading()
 
-    def __already_crawled(self, webpage):
+    def _already_crawled(self, webpage):
         # query webpages table in database and return true if already crawled
 
-    def __start_threading(self):
+    def _start_threading(self):
         for link in self.links:
             # self.links.delete(link)
             # create new thread on link that calls Crawler, do get_links on the instance

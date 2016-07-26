@@ -14,32 +14,32 @@ class Crawler(object):
         self.words = []
 
     def crawl(self):
-        self.__get_webpage_body() # method needs populating
-        self.__extract_links() # method needs populating
-        self.__extract_words()
-        self.__remove_duplicates()
-        self.__remove_common_words()
-        self.__save_to_database()
+        self._get_webpage_body() # method needs populating
+        self._extract_links() # method needs populating
+        self._extract_words()
+        self._remove_duplicates()
+        self._remove_common_words()
+        self._save_to_database()
 
     def get_links(self):
         return self.links
 
-    def __extract_links(self):
+    def _extract_links(self):
         # extract the links from self.webpage_body using scrapy and populate them into self.links array
         pass
 
-    def __extract_words(self):
+    def _extract_words(self):
         self.words = self.webpage_body.split(' ')
 
-    def __remove_duplicates(self):
+    def _remove_duplicates(self):
         words = list(set(self.words))
         self.words = words
 
-    def __remove_common_words(self):
+    def _remove_common_words(self):
         words = [word for word in self.words if word not in self.COMMON_WORDS]
         self.words = words
 
-    def __save_to_database(self):
+    def _save_to_database(self):
         saved_webpage = Webpage.create(url=self.webpage)
         word_objects = []
 
@@ -55,6 +55,6 @@ class Crawler(object):
 
         saved_webpage['words'].add(*word_objects)
 
-    def __get_webpage_body(self):
+    def _get_webpage_body(self):
         # scrapy gets the webpage body and populates self.webpage_body
         pass
