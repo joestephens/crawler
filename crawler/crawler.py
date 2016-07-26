@@ -40,20 +40,12 @@ class Crawler(object):
         self.words = words
 
     def _save_to_database(self):
-        saved_webpage = Webpage.create(url=self.webpage)
+        saved_webpage = Webpage.get_or_create(url=self.webpage)
         word_objects = []
-
         for word in self.words:
-            word_existing = Word.get(word=word)
-
-            if not word_existing:
-                word_object = Word.create(word=word)
-            else:
-                word_object = word_existing
-
-            word_objects.append(word_object)
-
-        saved_webpage['words'].add(*word_objects)
+            word_object = Word.get_or_create(word=word)
+            word_objects.append(word_object[0])
+        saved_webpage[0]['words'].add(*word_objects)
 
     def _get_webpage_body(self):
         # scrapy gets the webpage body and populates self.webpage_body
