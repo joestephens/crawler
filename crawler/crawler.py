@@ -1,32 +1,60 @@
+from crawler.models.webpage import Webpage
+from crawler.models.word import Word
+
 class Crawler(object):
 
     COMMON_WORDS = ['and', 'on', 'before', 'the', 'because']
 
+    WEBPAGE_BODY = "Hijack coloration nonlabeling wald fungitoxic lincs unglozed endosarcous komondor anthropophagously outstole albertville carbonnit fuchsine. Sentient semivowel ramoon vivaciousness wraac elastoplast nondisparaging reobserve dermabrasion noncomicality harmfulness tobias accordant groaner. Naif scampishness timer wemyss sheefishes pokier fleawort oileus foreconscious melon cuchulain boswellizing microcoulomb unintrusive. Gutsily racemed predetachment hayfork autonym storyteller jinnah swinge delayingly unsentineled lackerer overliberally enslaving cryptogamic. Ditchdigging banditti catchword erlina distractibility nonebullience pietas pontian inkwell striver ichinomiya stiegel paine petechiate."
+
     def __init__(self, webpage):
         self.webpage = webpage
+        self.webpage_body = self.WEBPAGE_BODY # needs to be replaced with empty string
         self.links = []
+        self.words = []
 
-    def start(self):
-        # Use scrapy to grab main content/article from webpage
-        content = __scrapy_get_content()
-        __extract_words(content)
-        __extract_links(content)
+    def crawl(self):
+        self.__get_webpage_body() # method needs populating
+        self.__extract_links() # method needs populating
+        self.__extract_words()
+        self.__remove_duplicates()
+        self.__remove_common_words()
+        self.__save_to_database()
 
     def get_links(self):
         return self.links
 
-    def __extract_words(self, content):
-        words = content.split(' ')
+    def __extract_links(self):
+        # extract the links from self.webpage_body using scrapy and populate them into self.links array
+        pass
 
-        for word in words:
-            if not word in COMMON_WORDS:
-                __add_word_to_db(word)
+    def __extract_words(self):
+        self.words = self.webpage_body.split(' ')
 
-    def __add_word_to_db(self, word):
-        # check if word is already in word table, if not then add it
-        # insert into join table: word_id and webpage_id
+    def __remove_duplicates(self):
+        words = list(set(self.words))
+        self.words = words
 
-    def __extract_links(self, content):
-        # Use scrapy to extract links from content
-        # for each link, check if it has been crawled already. If not, then add to
-        # self.links, to be returned to CrawlerWrapper
+    def __remove_common_words(self):
+        words = [word for word in self.words if word not in self.COMMON_WORDS]
+        self.words = words
+
+    def __save_to_database(self):
+        saved_webpage = Webpage.create(url=self.webpage)
+        word_objects = []
+
+        for word in self.words:
+            word_existing = Word.get(word=word)
+
+            if not word_existing:
+                word_object = Word.create(word=word)
+            else:
+                word_object = word_existing
+
+            word_objects.append(word_object)
+
+        saved_webpage['words'].add(*word_objects)
+
+    def __get_webpage_body(self):
+        # scrapy gets the webpage body and populates self.webpage_body
+        pass
