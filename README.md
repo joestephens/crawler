@@ -2,17 +2,17 @@
 class structure for crawler with RethinkDB and Remodel ORM.
 
 ## Installation Instructions:
-* Download RethinkDB server from Rethink website
-* Start server:
+1. Download RethinkDB server from Rethink website
+2. Start server:
 ```
 rethinkdb
 ```
-* In a new bash window:
+3. In a new bash window type:
 ```
 pip install remodel
 python setup.py
 ```
-* Then you can launch the python repl and type the following to populate the database:
+4. Then you can launch the python repl and type the following to populate the database:
 ```
 from crawler.crawler import Crawler
 
@@ -26,4 +26,4 @@ crawler.crawl()
 
 quit()
 ```
-If you visit http://localhost:8080 you can see the realtime read and writes, as well as the documents created.
+5. Visit http://localhost:8080 to see the realtime read and writes, as well as the documents created.
