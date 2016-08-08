@@ -1,4 +1,5 @@
-from remodel.models import Model
+#from remodel.models import Model
 
-class Webpage(Model):
-    has_and_belongs_to_many = ("Word",)
+class Webpage(object):
+    #has_and_belongs_to_many = ("Word",)
+    pass
