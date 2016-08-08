@@ -10,7 +10,7 @@ class Parser(HTMLParser):
 		self.webpage = webpage
 		self.data = { 'webpage_urls': [] }
 		self.last_tag = None
-		self.allowed_tags = ['meta', 'title', 'h1', 'h2', 'h3', 'p']
+		self.allowed_tags = ['title', 'h1', 'h2', 'h3', 'p']
 
 	def handle_starttag(self, tag, attrs):
 		if tag == 'a':
@@ -18,6 +18,10 @@ class Parser(HTMLParser):
 
 			if url:
 				self.__add_link(url)
+
+		if tag == 'meta':
+			if 'description' in attrs[0][1]:
+				self.data['description'] = attrs[1][1]
 
 		if tag in self.allowed_tags:
 			self.data[tag] = None
@@ -49,3 +53,8 @@ class Parser(HTMLParser):
 	def __get_partial(self):
 		url = re.search('(http[s]?|ftp):\/?\/?([^:\/\s]+)(\/\w+)', self.webpage)
 		return url.group(0)
+
+parser = Parser("http://www.bbc.co.uk/news/election-us-2016-36990724")
+r = requests.get(parser.webpage)
+parser.feed(r.text)
+print(parser.data)
