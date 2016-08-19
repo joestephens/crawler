@@ -23,7 +23,7 @@ class TestParser(unittest.TestCase):
 	def test_get_links(self):
 		body = "<h1>Hey</h1><a href='%s'>Link 1</a><a href='%s'>Link 2</a>" % (self.urls[0], self.urls[1])
 		self.parser.feed(body)
-		self.assertEqual(self.parser.data['webpage_urls'], self.urls)
+		self.assertEqual(self.parser.data['urls'], self.urls)
 
 	def test_ignores_tags(self):
 		body = "<script>some js</script><style>some css</style><h1>hey</h1>"

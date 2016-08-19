@@ -1,14 +1,15 @@
 import unittest
-from crawler.crawler import Crawler
+from crawler.multi_crawler import MultiCrawler
 
 class TestCrawler(unittest.TestCase):
-    
+
     def setUp(self):
-        self.crawler = Crawler()
-        
+        self.crawler = MultiCrawler("tests/fixtures/website/index.html")
+
     def tearDown(self):
         pass
-        
-    def test_returns_html(self):
-        html = self.crawler.get("fixtures/website/index.html")
-        self.assertIn('<html>', html)
+
+    def test_adds_to_database(self):
+        assertEqual(self.crawler.database.title, 'Example Website')
+        assertEqual(self.crawler.database.description, 'Rainbow Crawler is awesome')
+        assertIn('tests/fixtures/website/link2/', self.crawler.database.urls)

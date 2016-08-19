@@ -5,10 +5,10 @@ import re
 
 class Parser(HTMLParser):
 
-	def __init__(self, webpage):
+	def __init__(self, url):
 		HTMLParser.__init__(self)
-		self.webpage = webpage
-		self.data = { 'webpage_urls': [] }
+		self.url = url
+		self.data = { 'urls': [] }
 		self.last_tag = None
 		self.allowed_tags = ['title', 'h1', 'h2', 'h3', 'p']
 
@@ -42,7 +42,7 @@ class Parser(HTMLParser):
 		return self.__full_url(url)
 
 	def __add_link(self, url):
-		self.data['webpage_urls'].append(url)
+		self.data['urls'].append(url)
 
 	def __full_url(self, url):
 		if not (url.startswith('http')):
@@ -51,10 +51,14 @@ class Parser(HTMLParser):
 		return url
 
 	def __get_partial(self):
-		url = re.search('(http[s]?|ftp):\/?\/?([^:\/\s]+)(\/\w+)', self.webpage)
-		return url.group(0)
+		url = re.search('(http[s]?|ftp):\/?\/?([^:\/\s]+)(\/\w+)', self.url)
 
-parser = Parser("http://www.bbc.co.uk/news/election-us-2016-36990724")
-r = requests.get(parser.webpage)
-parser.feed(r.text)
-print(parser.data)
+		if url:
+			return url.group(0)
+
+		return ""
+
+# parser = Parser("http://www.bbc.co.uk/news/election-us-2016-36990724")
+# r = requests.get(parser.webpage)
+# parser.feed(r.text)
+# print(parser.data)
