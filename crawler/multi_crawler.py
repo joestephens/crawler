@@ -12,7 +12,6 @@ class MultiCrawler(object):
     def __init__(self, url):
         self.url = url
         self.parser = Parser(self.url)
-        self.database = []
         self.crawl()
 
     def crawl(self):
@@ -20,11 +19,13 @@ class MultiCrawler(object):
         self.__get_webpage_data()
         webpage = self.parser.data
 
-        title = webpage['title'] or ""
-        url = self.url or ""
-        description = webpage['description'] or ""
+        title = webpage['title']
+        url = self.url
+        description = webpage['description']
 
-        self.database.append({ 'title': title, 'url': url, 'description': description })
+        if description == "":
+            print("%sSkipped.%s" % (c.ORANGE, c.EC))
+            return None
 
         print("%s%s%s" % (c.ORANGE, title, c.EC))
         print("%s%s%s" % (c.YELLOW, url, c.EC))
@@ -51,5 +52,4 @@ class MultiCrawler(object):
 
         return None
 
-crawler = MultiCrawler("http://www.nytimes.com/")
-crawler.crawl()
+crawler = MultiCrawler("http://nytimes.com/")

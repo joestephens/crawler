@@ -8,20 +8,23 @@ class Parser(HTMLParser):
 	def __init__(self, url):
 		HTMLParser.__init__(self)
 		self.url = url
-		self.data = { 'urls': [] }
+		self.data = { 'urls': [], 'description': "" }
 		self.last_tag = None
 		self.allowed_tags = ['title', 'h1', 'h2', 'h3', 'p']
 
 	def handle_starttag(self, tag, attrs):
 		if tag == 'a':
-			url = self.__parse_url(attrs[0][1])
+			for name, value in attrs:
+				if name == "href":
+					url = self.__parse_url(value)
+					print(url)
 
-			if url:
-				self.__add_link(url)
+					if url:
+						self.__add_link(url)
 
 		if tag == 'meta':
 			if 'description' in attrs[0][1]:
-				self.data['description'] = attrs[1][1]
+				self.data['description'] = attrs[1][1][:250]
 
 		if tag in self.allowed_tags:
 			self.data[tag] = None
@@ -33,7 +36,7 @@ class Parser(HTMLParser):
 			return None
 
 		if self.last_tag in self.allowed_tags:
-			self.data[self.last_tag] = unquote(data)
+			self.data[self.last_tag] = unquote(data)[:250]
 
 	def __parse_url(self, url):
 		if not (url.startswith('http') or url.startswith('/')):
@@ -56,9 +59,5 @@ class Parser(HTMLParser):
 		if url:
 			return url.group(0)
 
+		print("rETURNING NONE")
 		return ""
-
-# parser = Parser("http://www.bbc.co.uk/news/election-us-2016-36990724")
-# r = requests.get(parser.webpage)
-# parser.feed(r.text)
-# print(parser.data)
