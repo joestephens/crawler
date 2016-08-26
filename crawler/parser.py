@@ -1,4 +1,5 @@
 from html.parser import HTMLParser
+from urllib.parse import urlparse
 from urllib.parse import unquote
 import requests
 import re
@@ -17,7 +18,6 @@ class Parser(HTMLParser):
 			for name, value in attrs:
 				if name == "href":
 					url = self.__parse_url(value)
-					print(url)
 
 					if url:
 						self.__add_link(url)
@@ -54,10 +54,9 @@ class Parser(HTMLParser):
 		return url
 
 	def __get_partial(self):
-		url = re.search('(http[s]?|ftp):\/?\/?([^:\/\s]+)(\/\w+)', self.url)
-
+		url = urlparse(self.url)
+		
 		if url:
-			return url.group(0)
+			return("%s://%s" % (url.scheme, url.netloc))
 
-		print("rETURNING NONE")
-		return ""
+		return None

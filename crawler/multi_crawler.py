@@ -24,20 +24,22 @@ class MultiCrawler(object):
         description = webpage['description']
 
         if description == "":
-            print("%sSkipped.%s" % (c.ORANGE, c.EC))
+            print("%sSkipped.%s" % (c.VIOLET, c.EC))
             return None
 
         print("%s%s%s" % (c.ORANGE, title, c.EC))
         print("%s%s%s" % (c.YELLOW, url, c.EC))
         print("%s%s%s" % (c.GREEN, description, c.EC))
 
-        db.query("INSERT into webpages (title, url, description) VALUES ('%s', '%s', '%s')" % (title[:500], url[:500], description[:500]))
+        db.query("INSERT into webpages (title, url, description) VALUES (%s, %s, %s)", (title[:500], url[:500], description[:500]))
 
         for url in webpage['urls']:
             db.query("SELECT url FROM webpages WHERE url='%s'" % (url))
 
             if db.cur.fetchone() == None:
                 self.__new_crawling_process(url)
+            else:
+                print("%sURL already crawled.%s" % (c.BLUE, c.EC))
 
     def __get_webpage_data(self):
         response = requests.get(self.parser.url)
@@ -45,7 +47,7 @@ class MultiCrawler(object):
 
     def __new_crawling_process(self, url):
         if not url == self.url:
-            print("Starting new process")
+            print("%sStarting new process...%s" % (c.INDIGO, c.EC))
             process = Process(target=self.__class__, args=(url,))
             process.start()
             process.join()
